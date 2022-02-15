@@ -6,12 +6,13 @@
     "jsx": "react",
     "esModuleInterop": true,
     "types": ["jest"],
-    "strict": true,
+    "strict": false,
     "skipLibCheck": true,
     "declaration": true,
+    "experimentalDecorators": true,
     "baseUrl": "./",
     "paths": {
-      "@lllhys/modal": ["src/index.ts"]
+      "@lightfish/waterui": ["src/index.ts"]
     }
   }
 }
