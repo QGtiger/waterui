@@ -24,7 +24,7 @@ export class ModalControllerComponent<T, V> extends React.Component<T, V> {
 
 /**
  * Modal 装饰器
- * @param cfg 配置项
+ * @param cfg 配置项 TODO 有些配置项 去掉
  * @param events 
  * @param props 
  * @param isFulfillConfig 
@@ -166,6 +166,7 @@ export function UseLfModal(cfg: ShowModalConfig, events?: EventsDispatchCenter, 
               <ModalNode
                 {...this.props}
                 {...props}
+                closePop={this.props.closeFunc || this.close}
               />
             </div>
           </div>
