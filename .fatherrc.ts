@@ -1,8 +1,7 @@
 export default {
-  file: 'lightfishwaterui',
+  cjs: "rollup",
   esm: {
     type: 'rollup',
-    file: 'lightfishwaterui',
     importLibToEs: true
   },
   runtimeHelpers: true

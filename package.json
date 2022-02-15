@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@lightfish/waterui",
   "version": "1.0.0",
   "scripts": {
@@ -11,10 +10,18 @@
     "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\"",
     "test": "umi-test",
     "test:coverage": "umi-test --coverage",
-    "prepublishOnly": "npm run build"
+    "major": "npm version major",
+    "minor": "npm version minor",
+    "patch": "npm version patch",
+    "prepublish": "npm run build",
+    "pub": "npm publish --access=public",
+    "pub:major": "npm run major && npm run pub",
+    "pub:minor": "npm run minor && npm run pub",
+    "pub:patch": "npm run patch && npm run pub"
   },
-  "module": "es/index.js",
-  "typings": "es/index.d.ts",
+  "main": "./dist/index",
+  "module": "./dist/index.esm.js",
+  "typings": "./dist/index.d.ts",
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
@@ -25,6 +32,10 @@
     "*.ts?(x)": [
       "prettier --parser=typescript --write"
     ]
+  },
+  "peerDependencies": {
+    "react": ">=16.4.0",
+    "react-dom": ">=16.4.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.16.7"
