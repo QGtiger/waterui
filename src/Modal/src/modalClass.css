@@ -20,7 +20,7 @@
 
 /* // 往上划的动效 */
 .slide-top-leave-active, .slide-top-enter-active {
-  transition: all 10s cubic-bezier(0.25, 0.1, 0.43, 1.27);
+  transition: all 0.4s cubic-bezier(0.25, 0.1, 0.43, 1.27);
 }
 
 .slide-top-enter, .slide-top-leave-to {

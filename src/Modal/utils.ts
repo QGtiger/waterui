@@ -173,17 +173,17 @@ export function removeHandler(element: any, type:string, callback:Function) {
  */
 export const H5ScrollCtrl = (function () {
   let isLockScroll = false // 是否已经锁定了
-  let scrollCont = document.body;
+  let scrollCont = document.getElementsByTagName("html")[0]; // 默认就是 html
   let currScrollTop = 0;
   return {
     disabled() {
       if (isLockScroll) return
       isLockScroll = true
-      const html = document.getElementsByTagName("html")[0];
-      // 判断是不是 html在 滚动
-      if (html.scrollTop) {
-        scrollCont = html;
-      }
+      // const html = document.getElementsByTagName("html")[0];
+      // // 判断是不是 html在 滚动
+      // if (html.scrollTop) {
+      //   scrollCont = html;
+      // }
       const scrollTop = scrollCont.scrollTop;
       currScrollTop = scrollTop;
 

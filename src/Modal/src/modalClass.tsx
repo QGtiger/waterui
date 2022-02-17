@@ -244,7 +244,6 @@ export class LfModalComponent implements LfModalComponentImplements {
   showModal(props?: AnyModalProps, showConfig?: ShowModalConfig) {
     return new Promise<void>(async (resolve) => {
       this.setPropsOrShowConfig(props, showConfig)
-      console.log(!!this.LfModalComponentIns)
       if (!this.LfModalComponentIns) {
         const wrapperCont = this.wrapperCont = document.createElement('div')
         const wrapperContParent = this.config.appendDom

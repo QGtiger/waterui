@@ -129,12 +129,17 @@ export class ModalController {
    */
   showModal(comp: MapUniqueKey, props: AnyModalProps = {}, cfg: ShowModalConfig = {}): LfModalComponentImplements {
     let currModal = this.modalMap.get(comp)
-    if (currModal) {
-      currModal.setPropsOrShowConfig(props, cfg, false)
-    } else {
-      if (['string', 'number'].includes(typeof comp)) {
+    const isUniqueKey = ['string', 'number'].includes(typeof comp)
+    if (isUniqueKey) {
+      if (currModal) {
+        currModal.setPropsOrShowConfig(props, cfg, false)
+      } else {
         console.error(`not exist Modal, please enter correct uniqueKey`)
         return
+      }
+    } else {
+      if (currModal && !cfg.forceShow) {
+        currModal.setPropsOrShowConfig(props, cfg, false)
       } else {
         // @ts-expect-error TODO 类型分割
         currModal = this.initModal(comp, props, cfg)
@@ -142,7 +147,6 @@ export class ModalController {
     }
     const handledModal = currModal
     const currConfig = handledModal.config
-    console.log(this.activeModalList.size(), currConfig)
     if (this.activeModalList.size() && currConfig.queue) {
       // activeModal 存在的话，就enqueue 到等到队列中
       handledModal.inQueue = true
