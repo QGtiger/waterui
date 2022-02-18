@@ -37,4 +37,7 @@ jobs:
         run: npm run docs:build
         
       - name: docs deploy
-        run: npm run docs:deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.ACCESS_TOKEN }}
+          publish_dir: ./docs-dist
