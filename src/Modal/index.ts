@@ -43,12 +43,6 @@ export class ModalController {
 
   createModalComponent(comp: InitModalComp, props: AnyModalProps = {}, cfg: ShowModalConfig = {}, uk: MapUniqueKey): LfModalComponentImplements {
     const createdModal: LfModalComponentImplements = new LfModalComponent(comp, props, this.getRequiredModalConfig(cfg), uk)
-
-    // if (createdModal.config.queue) {
-    //   this.queueModalList.enqueue(createdModal)
-    // } else {
-    //   this.activeModalList.enqueue(createdModal)
-    // }
     createdModal.$on(['beforeInit', 'inited', 'beforeShow', 'showed', 'beforeClose', 'closed', 'beforeDestroy', 'destroyed'], (e) => {
       this.$emit(e.type, e)
       const currModal = e.target
