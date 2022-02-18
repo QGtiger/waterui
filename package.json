@@ -1,6 +1,7 @@
 {
   "name": "@lightfish/waterui",
   "version": "1.0.2",
+  "homepage": "https://qgtiger.github.io/waterui/",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
