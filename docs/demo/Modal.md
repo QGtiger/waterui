@@ -92,10 +92,6 @@ export default () => {
         aniName: 'fade-in-linear'
       }
     })
-    ModalCtrlIns.showModal(a, {}, {
-      forceShow: true,
-      coc: true
-    })
     ModalCtrlIns.showModal('233', {}, {
       queue: true
     })
