@@ -241,7 +241,7 @@ export class LfModalComponent implements LfModalComponentImplements {
   }
 
   @PromiseAwait<ModalState>('state', [ModalState.BEFORESHOW, ModalState.SHOWED], [ModalState.INITED, ModalState.CLOSED])
-  showModal(props?: AnyModalProps, showConfig?: ShowModalConfig) {
+  forceShow(props?: AnyModalProps, showConfig?: ShowModalConfig) {
     return new Promise<void>(async (resolve) => {
       this.setPropsOrShowConfig(props, showConfig)
       if (!this.LfModalComponentIns) {
@@ -258,7 +258,7 @@ export class LfModalComponent implements LfModalComponentImplements {
                 getModalIns={(r)=> {
                   this.LfModalComponentIns = r
                 }}
-                closeFunc={this.closeModal.bind(this)}
+                closeFunc={this.forceClose.bind(this)}
               />
             , wrapperCont, async () => {
               await this.LfModalComponentIns?.show()
@@ -276,7 +276,7 @@ export class LfModalComponent implements LfModalComponentImplements {
   }
 
   @PromiseAwait('state', [ModalState.BEFORECLOSE, ModalState.CLOSED], [ModalState.SHOWED])
-  closeModal(closeConfig?: AniConfig) {
+  forceClose(closeConfig?: AniConfig) {
     return new Promise<void>(async(r) => {
       if (this.LfModalComponentIns) {
         await this.LfModalComponentIns.close(closeConfig)

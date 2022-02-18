@@ -104,8 +104,8 @@ export interface LfModalClassComponentImplements extends EventsDispatchReactComp
 }
 
 export interface LfModalComponentImplements extends EventsControl{
-  showModal: (props?: AnyModalProps, config?: ShowModalConfig) => Promise<void>,
-  closeModal: (config?: AniConfig) => Promise<void>
+  forceShow: (props?: AnyModalProps, config?: ShowModalConfig) => Promise<void>,
+  forceClose: (config?: AniConfig) => Promise<void>
   config: RequiredShowModalConfig,
   props: AnyModalProps
   wrapperCont: HTMLElement,

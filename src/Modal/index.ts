@@ -62,7 +62,7 @@ export class ModalController {
         this.activeModalList.dequeueOfItem(currModal)
         if (!this.activeModalList.size() && this.queueModalList.size()) {
           const dequeueModal = this.queueModalList.dequeue()
-          dequeueModal?.showModal()
+          dequeueModal?.forceShow()
         }
       }
       if (e.type === 'showed') {
@@ -152,7 +152,7 @@ export class ModalController {
       handledModal.inQueue = true
       this.queueModalList.insertQueue(handledModal, currConfig.queueIndex)
     } else {
-      handledModal.showModal(props, cfg)
+      handledModal.forceShow(props, cfg)
     }
     return handledModal 
   }
@@ -163,7 +163,7 @@ export class ModalController {
       console.error(`not exist Modal, please enter correct uniqueKey`)
       return
     }
-    currModal.closeModal(closeCfg)
+    currModal.forceClose(closeCfg)
   }
 }
 
