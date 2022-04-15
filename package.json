@@ -45,7 +45,8 @@
     "react-dom": ">=16.4.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.16.7"
+    "@babel/runtime": "^7.16.7",
+    "@lightfish/tools": "^1.0.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.15.1",
