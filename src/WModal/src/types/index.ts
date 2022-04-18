@@ -1,4 +1,8 @@
+import { CSSProperties } from "react"
+import { WTIModal } from "../modalClass"
+
 export enum ModalState {
+  BEFOREINIT = 'beforeInit',
   INITED = 'inited',
   BEFORESHOW = 'beforeShow',
   SHOWED = 'showed',
@@ -10,7 +14,8 @@ export enum ModalState {
 
 // 事件
 export interface Event {
-  type: ModalState
+  type: ModalState,
+  target: WTIModal
 }
 
 // 事件回调方法
@@ -41,20 +46,27 @@ export interface EventsDispatcher {
 }
 
 /**
+ * UseModal 配置
+ */
+export type UseModalConfig = {
+  coc: boolean, // click outside close
+  fixedBody: boolean, // 是否 固定背景
+  center: boolean, // 居中
+  containerStyle: CSSProperties, // 外部容器 style 样式
+  preloadResource?: string[], // 预加载 资源
+  preloadResourceFunc?: {[x: string]: (res: string) => Promise<any>}, // 资源加载器， 默认 配置 others
+  parallelMode?: boolean, // 并行加载
+} & AniModalConfig
+
+/**
  * modal 显示 配置
  */
 export type ShowModalConfig = {
   destroyed: boolean; // 是否销毁
   appendDom: HTMLElement; // 添加到 页面dom 中
-  coc: boolean; // click outside close
-  fixedBody: boolean; // 是否 固定背景
-  center: boolean; // 居中
   queue: boolean; // 队列弹窗
   forceShow: boolean, // force for show 弹窗复用
-  containerStyle: CSSStyleDeclaration, // 外部容器 style 样式
-  preloadResource: string[], // 预加载 资源
-  preloadFunc: {[x: string]: (res: string) => void} // 资源加载器， 默认 配置 others
-} & AniModalConfig
+} & UseModalConfig
 
 export type AniConfig = {
   aniType?: 'transition' | 'animation',
@@ -73,4 +85,6 @@ export type AnyModalProps = {
   [k: string]: any
 }
 
-export type UniqueKeyModal = 'string' | ReactComponent
+export type UniqueKey = string
+
+export type UniqueKeyModal = UniqueKey | ReactComponent

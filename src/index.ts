@@ -1,4 +1,4 @@
-import { UseAni, WTIModal } from './WModal/src/modalClass';
+import { UseAni, UseModal, WTIModal } from './WModal/src/modalClass';
 import { ModalCtrlIns } from './Modal'
 import { UseLfModal } from './Modal/src/modalClass'
 
@@ -7,5 +7,6 @@ export {
   UseLfModal,
 
   WTIModal,
-  UseAni
+  UseAni,
+  UseModal
 }

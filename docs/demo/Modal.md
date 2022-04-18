@@ -12,7 +12,7 @@ nav:
 
 ```jsx
 import React, { forwardRef, useImperativeHandle, useRef, useReducer } from 'react'
-import { ModalCtrlIns, UseLfModal, WTIModal, UseAni } from '@lightfish/waterui'
+import { ModalCtrlIns, UseLfModal, WTIModal, UseAni, UseModal } from '@lightfish/waterui'
 
 const a = (props) => {
   return (
@@ -38,8 +38,11 @@ const a = (props) => {
 // aa.showModal()
 
 @UseAni({
-  aniType: 'transition',
-  aniName: 'slide-top'
+  aniConfig: {
+    aniType: 'transition',
+    aniName: 'fade-in-linear'
+  },
+  autoAni: true
 })
 class CC extends React.Component {
   componentDidMount() {
@@ -52,7 +55,7 @@ class CC extends React.Component {
   }
 }
 
-@UseLfModal({
+@UseModal({
     containerStyle: {
       overflow: 'hidden',
       position: 'static',
@@ -80,13 +83,12 @@ class BB extends React.Component {
   render() {
     return (
       <div>
-        <AA visible={true} getModalIns={r=>{
+        <AA visible={false} getModalIns={r=>{
           console.log('getModalIns')
           this.aIns=r
-          console.log(r)
-          this.aIns.$on('inited', () => {
-            console.log(123123123123123)
-          })
+          setTimeout(() => {
+            r.modalShow()
+          }, 1000)
         }} />
       </div>
     )
@@ -243,21 +245,28 @@ export default () => {
   window.parent.ttt =  new WTIModal((props) => {
     return (
       <div>
-        <span>{props.tt}</span>
-        <img src="http://qnpic.top/yoona2.jpg" />
+        <span onClick={(e) => {
+          console.log(props.tt)
+        }}>{props.tt}</span>
       </div>
     )
   }, {
     tt: '233'
   }, {
-    appendDom: document.body
+    appendDom: document.body,
+    coc: true,
+    fixedBody: false,
+    aniConfig: {
+      aniName: 'testfadein',
+      aniType: 'animation'
+    },
+    preloadResource: Array(140).fill(1).map((_, i) => {
+      return `http://qnpic.top/yoona${i}.jpg`
+    })
   }, '123')
   return (
     <div>
     <CC getAniIns={el => {
-      console.log('getAniIns', el)
-      el.showAni()
-      window.parent.showAni = el.showAni
     }}/>
     <BB /><p onClick={showModalTest}>123</p><p>123</p><p>123</p><p>123</p><p>123</p><p>123</p><p>123</p><p>123</p><p>123</p><p>123</p><p>123</p><p>123</p><p>123</p>  </div>
   )
