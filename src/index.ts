@@ -1,6 +1,6 @@
 import { UseAni, UseModal, WTIModal } from './WModal/src/modalClass';
 import { ModalCtrlIns } from './Modal';
 import { UseLfModal } from './Modal/src/modalClass';
-import { WtModal } from './WModal/index';
+import { WtModal, ModalControlIns } from './WModal/index';
 
-export { WtModal };
+export { WtModal, ModalControlIns };

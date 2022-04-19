@@ -223,8 +223,9 @@ export class ModalControl {
   }
 }
 
+export const ModalControlIns = new ModalControl();
+
 export namespace WtModal {
-  export const ModalControlIns = new ModalControl();
   export const ModalController = ModalControl;
   export const UseAniFactory = UseAni;
 }
