@@ -12,7 +12,7 @@ nav:
 
 ```jsx
 import React, { forwardRef, useImperativeHandle, useRef, useReducer } from 'react';
-import { ModalCtrlIns, UseLfModal, WtModal } from '@lightfish/waterui';
+import { ModalControlIns, UseLfModal, WtModal } from '@lightfish/waterui';
 
 window.WtModal = WtModal;
 
@@ -20,7 +20,7 @@ const a = (props) => {
   return <div>{props.t}</div>;
 };
 
-// let aa = ModalCtrlIns.initModal(a, {t: 12313123}, {
+// let aa = ModalControlIns.initModal(a, {t: 12313123}, {
 //   coc: true
 // })
 // aa.$on(['showed'], function(e){
@@ -102,7 +102,25 @@ function wrapPromise(promise) {
 
 const fetchData = fetchProfileData();
 
+  const isResolve = React.useRef()
+
 function SuspenseComp(props) {
+  const resolveCur = React.useRef()
+  React.useEffect(() => {
+    console.log(isResolve)
+    if (!isResolve.current) {
+      setTimeout(() => {
+        
+        isResolve.current = true
+        console.log(isResolve, resolveCur.current)
+        resolveCur.current()
+      }, 6000)
+      throw new Promise((r) => {
+        resolveCur.current = r
+      })
+    }
+    
+  }, [])
   const list = fetchData.posts.read();
   console.log('SuspenseComp render', props);
   return (
@@ -134,20 +152,11 @@ let ttt = {
   text: '1111',
 };
 
-// {
-//   (function() {
-//     console.log('render ====>>>>', ttt)
-//     return (
-//       <React.Suspense fallback={123}>
-//         <SuspenseCompObserve {...ttt} ref={testRef} />
-//       </React.Suspense>
-//     )
-//   })()
-// }
+
 export default () => {
   const [, fUpdate] = useReducer((s) => s + 1, 0);
   function showModalTest() {
-    const aIns = ModalCtrlIns.setUniqueModal(
+    const aIns = ModalControlIns.setUniqueModal(
       '233',
       a,
       {
@@ -155,9 +164,10 @@ export default () => {
       },
       {
         coc: true,
+        preloadResource: ['http://qnpic.top/yoona2.jpg']
       },
     );
-    ModalCtrlIns.showModal(
+    ModalControlIns.showModal(
       '233',
       {},
       {
@@ -166,7 +176,7 @@ export default () => {
         },
       },
     );
-    ModalCtrlIns.showModal(
+    ModalControlIns.showModal(
       '233',
       {},
       {
@@ -191,6 +201,9 @@ export default () => {
   // }, 2000)
   return (
     <div>
+    <React.Suspense fallback={1211231233}>
+      <SuspenseCompObserve {...ttt} ref={testRef} />
+    </React.Suspense>
       <p onClick={showModalTest}>123</p>
       <p>123</p>
       <p>123</p>

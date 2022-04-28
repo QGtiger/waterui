@@ -364,7 +364,7 @@ export class WTIModal {
     [ModalState.INITED, ModalState.CLOSED],
   )
   forceShow(props?: AnyModalProps, cfg?: Partial<ShowModalConfig>) {
-    return new Promise<void>(async (resolve) => {
+    return new Promise<void>(async (resolve, reject) => {
       this.setPropsOrShowConfig(props, cfg);
 
       if (this.modalIns) {
@@ -419,6 +419,7 @@ export class WTIModal {
           });
         } catch (e) {
           console.error('render Errpr:', e);
+          reject(e);
         }
       }
     });

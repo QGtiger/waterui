@@ -44,7 +44,7 @@ export async function onPreloadOnce(
   url: string,
   preloadFunc: { [x: string]: (res: string) => Promise<any> } = {},
 ) {
-  console.log('onPreloadOnce', url);
+  console.log('预加载', url);
   const type = url.split('.').pop();
   const imageType = ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp'];
   const preloadKeys = Object.keys(preloadFunc || {});
@@ -99,13 +99,10 @@ export function onPreloadResource(
     if (parallelMode) {
       await Promise.all(
         resouces.map(async (item: string) => {
-          return onPreloadOnce(item).then((re) => {
+          return onPreloadOnce(item, func).then((re) => {
             loadedCount++;
             return re;
           });
-          const re = await onPreloadOnce(item);
-          loadedCount++;
-          return re;
         }),
       );
     } else {
