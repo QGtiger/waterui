@@ -1,8 +1,8 @@
+import { ShowModalConfig } from '../types/WModal';
 import { UseEvents } from './src/decorator';
-import { WTIModal, UseAni } from './src/modalClass';
+import { WTIModal } from './src/modalClass';
 import {
   ModalState,
-  ShowModalConfig,
   ReactComponent,
   AnyModalProps,
   UniqueKeyModal,
@@ -26,7 +26,7 @@ const defaultModalControllerConfig: ShowModalConfig = {
   },
   parallelMode: false,
   preloadResource: [],
-  preloadResourceFunc: {},
+  preloadResourceFunc: {}
 };
 
 @UseEvents()
@@ -88,6 +88,9 @@ export class ModalControl {
           }
           this.onDequeueActiveModalList(target);
         }
+
+        // @ts-ignore
+        this.dispatchEvents(e.type, e)
       },
     );
     return WitModalIns;
@@ -149,19 +152,21 @@ export class ModalControl {
    * 添加到 当前显示弹窗队列中
    * @param m
    */
-  onEnqueueActiveModalList(m: WTIModal) {
-    this.activeModalList.enqueue(m);
-    m.forceShow();
+  private onEnqueueActiveModalList(m: WTIModal) {
+    if (this.activeModalList.enqueue(m)) {
+      m.forceShow()
+    }
+    
   }
 
-  onDequeueActiveModalList(m: WTIModal) {
+  private onDequeueActiveModalList(m: WTIModal) {
     this.activeModalList.dequeueOfItem(m);
     if (!this.activeModalList.size() && this.queueModalList.size()) {
       this.onEnqueueActiveModalList(this.queueModalList.dequeue());
     }
   }
 
-  onEnqueueQueueModalList(m: WTIModal) {
+  private onEnqueueQueueModalList(m: WTIModal) {
     this.queueModalList.enqueue(m);
   }
 
@@ -227,5 +232,4 @@ export const ModalControlIns = new ModalControl();
 
 export namespace WtModal {
   export const ModalController = ModalControl;
-  export const UseAniFactory = UseAni;
 }

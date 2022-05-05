@@ -55,9 +55,8 @@ export async function onPreloadOnce(
         return ve;
       });
     } else {
-      return imgPreload(url).catch((e) => {
-        console.error(e);
-      });
+      // await new Promise(r => setTimeout(r, 100))
+      return imgPreload(url);
     }
   }
 
@@ -87,27 +86,50 @@ export function onPreloadResource(
   resouces: string[],
   parallelMode: boolean = false,
   func?: { [x: string]: (res: string) => Promise<any> },
+  onProcess?: (loaded: number, total: number) => void,
+  onLoaded?: (total: number) => void,
 ) {
   if (!resouces || resouces.length === 0) {
-    return Promise.resolve();
+    
+    return onLoaded(0);
   }
   return new Promise(async (resolve) => {
     let totalCount = resouces.length,
       loadedCount = 0;
+    // 不管加载有没有成功 都 loaded +1
+    const loadedSucOrError = () => {
+      loadedCount++;
+      try {
+        onProcess && onProcess(loadedCount, totalCount);
+        if (loadedCount === totalCount) {
+          onLoaded && onLoaded(totalCount);
+        }
+      } catch(e) {
+        console.error('onProcess or on Loaded exec Error:' + e);
+      }
+      return
+    }
+
     if (parallelMode) {
       await Promise.all(
         resouces.map(async (item: string) => {
           return onPreloadOnce(item, func).then((re) => {
-            loadedCount++;
+            loadedSucOrError()
             return re;
-          });
+          }).catch(e => {
+            console.error('onPreloadOnce Error: ' + e)
+            loadedSucOrError()
+          })
         }),
       );
     } else {
       for (let i = 0; i < resouces.length; i++) {
         await onPreloadOnce(resouces[i], func).then((re) => {
-          loadedCount++;
+          loadedSucOrError()
           return re;
+        }).catch(e => {
+          console.error('onPreloadOnce Error: ' + e)
+          loadedSucOrError()
         });
       }
     }

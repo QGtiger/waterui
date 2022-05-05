@@ -8,216 +8,144 @@ nav:
 
 # Modal
 
-> `@lightfish/waterui` 弹窗使用
+> `@lightfish/waterui` 弹窗使用.
+### showModal
+
+> 其中主要使用的是实例对象 `ModalControlIns` 上面的 `showModal` 方法，其中 showModal 入参有三个，第一个就是要 显示 modalKey，第二个是 弹窗的 props， 第三个是这个弹窗的配置项。
+
+
+
+| 入参           | 意义                     |
+| -------------- | :----------------------- |
+| UniqueKeyModal | ReactComponent \| string |
+| props          | AnyModalProps 默认{}     |
+| modalCfg       | 弹窗配置项具体如下       |
+
+
+
+| modalCfg 弹窗配置   | 基本信息和默认项                                             | 默认值                                                       |
+| ------------------- | :----------------------------------------------------------- | ------------------------------------------------------------ |
+| destroyed           | 是否被销毁                                                   | true                                                         |
+| appendDom           | 弹窗到哪个元素下                                             | document.body                                                |
+| queue               | 是否是队列弹窗                                               | false                                                        |
+| forceShow           | 用于弹窗复用                                                 | false                                                        |
+| coc                 | 点击弹窗外部是否关闭                                         | false                                                        |
+| fixedBody           | 显示弹窗是否固定背景                                         | true                                                         |
+| center              | 是否居中布局                                                 | true                                                         |
+| containerStyle      | 外部 container 样式                                          | {}                                                           |
+| aniConfig           | 弹窗默认动画                                                 | {<br>    aniName: 'fade-in-linear',<br>    aniType: 'transition',<br>} |
+| showAniConfig       | 弹窗显示动画                                                 | 如上                                                         |
+| closeAniConfig      | 弹窗关闭动画                                                 | 如上                                                         |
+| preloadResource     | 资源预加载                                                   | []                                                           |
+| preloadResourceFunc | 资源预加载方法,内置了图片的预加载                            | {}                                                           |
+| parallelMode        | 资源是否并行加载                                             | false                                                        |
+| loadingComp         | 资源预加载显示的 loading， loadingComp<br>props 上有loaded， total, loadedResolve<br>loadedResolve 是用于想loadingComp 自身控制<br>资源是否全部加载完成的回调方法 | 默认自带的loading 组件                                       |
+| isLoadingInControl  | 和loadedResolve 一起使用                                     | false                                                        |
+| preloadOnce         | 资源是否只加载一次                                           | true                                                         |
+
+> 基本的 showModal 简单使用如下
+
 
 ```jsx
-import React, { forwardRef, useImperativeHandle, useRef, useReducer } from 'react';
-import { ModalControlIns, UseLfModal, WtModal } from '@lightfish/waterui';
-
-window.WtModal = WtModal;
-
-const a = (props) => {
-  return <div>{props.t}</div>;
-};
-
-// let aa = ModalControlIns.initModal(a, {t: 12313123}, {
-//   coc: true
-// })
-// aa.$on(['showed'], function(e){
-//   console.log('showed', e)
-// })
-// setTimeout(() => {
-//   aa.closeModal()
-// }, 1000)
-// aa.showModal(null, {
-//   showAniConfig: {
-//     aniName: 'fade-in-linear',
-//     animation: 'transition'
-//   }
-// })
-// aa.showModal()
-
-function fetchPosts() {
-  console.log('fetch posts...');
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log('fetched posts');
-      resolve([
-        {
-          id: 0,
-          text: 'I get by with a little help from my friends',
-        },
-        {
-          id: 1,
-          text: "I'd like to be under the sea in an octupus's garden",
-        },
-        {
-          id: 2,
-          text: 'You got that sand all over your feet',
-        },
-      ]);
-    }, 1000);
-  });
-}
-
-function fetchProfileData() {
-  let postsPromise = fetchPosts();
-  return {
-    posts: wrapPromise(postsPromise),
-  };
-}
-
-// Suspense integrations like Relay implement
-// a contract like this to integrate with React.
-// Real implementations can be significantly more complex.
-// Don't copy-paste this into your project!
-function wrapPromise(promise) {
-  let status = 'pending';
-  let result;
-  let suspender = promise.then(
-    (r) => {
-      status = 'success';
-      console.log('?????,', status);
-      result = r;
-    },
-    (e) => {
-      status = 'error';
-      result = e;
-    },
-  );
-  return {
-    read() {
-      console.log('curr status', status);
-      if (status === 'pending') {
-        throw suspender;
-      } else if (status === 'error') {
-        throw result;
-      } else if (status === 'success') {
-        console.log(result);
-        return result;
-      }
-    },
-  };
-}
-
-const fetchData = fetchProfileData();
-
-  const isResolve = React.useRef()
-
-function SuspenseComp(props) {
-  const resolveCur = React.useRef()
-  React.useEffect(() => {
-    console.log(isResolve)
-    if (!isResolve.current) {
-      setTimeout(() => {
-        
-        isResolve.current = true
-        console.log(isResolve, resolveCur.current)
-        resolveCur.current()
-      }, 6000)
-      throw new Promise((r) => {
-        resolveCur.current = r
-      })
-    }
-    
-  }, [])
-  const list = fetchData.posts.read();
-  console.log('SuspenseComp render', props);
-  return (
-    <div>
-      {props.text || ''}
-      {list.map((item) => {
-        return <p key={item.id}>{item.text}</p>;
-      })}
-    </div>
-  );
-}
-
-function makeObserverComp(Comp) {
-  return React.memo(
-    forwardRef((props, ref) => {
-      const [, fUpdate] = useReducer((s) => s + 1, 0);
-      const compRef = useRef();
-      useImperativeHandle(ref, () => ({
-        forceUpdate() {
-          fUpdate();
-        },
-      }));
-      return <Comp {...props} />;
-    }),
-  );
-}
-
-let ttt = {
-  text: '1111',
-};
-
+import React from 'react';
+import { ModalControlIns } from '@lightfish/waterui';                 
 
 export default () => {
-  const [, fUpdate] = useReducer((s) => s + 1, 0);
-  function showModalTest() {
-    const aIns = ModalControlIns.setUniqueModal(
-      '233',
-      a,
-      {
-        t: 1111,
-      },
-      {
-        coc: true,
-        preloadResource: ['http://qnpic.top/yoona2.jpg']
-      },
-    );
-    ModalControlIns.showModal(
-      '233',
-      {},
-      {
-        closeAniConfig: {
-          aniName: 'fade-in-linear',
-        },
-      },
-    );
-    ModalControlIns.showModal(
-      '233',
-      {},
-      {
-        queue: true,
-      },
-    );
+  function showTestModal() {
+    // 默认方法组件会给 props 上挂载一个 closeModal 进行内部调用关闭
+    ModalControlIns.showModal((props) => {
+      return (
+        <div onClick={props.closeModal}>test {props.test}</div>
+      )
+    }, {
+      test: 'showTestModal'
+    })
   }
-  const testRef = useRef();
-  const SuspenseCompObserve = makeObserverComp(SuspenseComp);
-  window.parent.fUpdate = function (t) {
-    ttt = {
-      text: '2222',
-    };
-    console.log(ttt);
-    fUpdate();
-    // testRef.current.forceUpdate()
-  };
-  // setTimeout(() => {
-  //   ttt = 'test123123'
-  //   // testRef.current.forceUpdate()
-  //   console.log(testRef, ttt)
-  // }, 2000)
+
+  function showClassCompModal() {
+    // 默认 class 组件 会直接在原型上 挂一个 closeModal 方法
+    ModalControlIns.showModal(class extends React.Component{
+      render() {
+        return (
+          <div onClick={this.closeModal}>test {this.props.test}</div>
+        )
+      }
+    }, {
+      test: 'showClassCompModal'
+    }, {
+      coc: true
+    })
+  }
   return (
     <div>
-    <React.Suspense fallback={1211231233}>
-      <SuspenseCompObserve {...ttt} ref={testRef} />
-    </React.Suspense>
-      <p onClick={showModalTest}>123</p>
-      <p>123</p>
-      <p>123</p>
-      <p>123</p>
-      <p>123</p>
-      <p>123</p>
-      <p>123</p>
-      <p>123</p>
-      <p>123</p>
-      <p>123</p>
-      <p>123</p>
-      <p>123</p>
-      <p>123</p>{' '}
+      <button onClick={showTestModal}>显示function弹窗</button>
+      <button onClick={showClassCompModal}>显示class component弹窗</button>
     </div>
-  );
-};
+  )
+}
+```
+
+### initModal
+
+> 初始化 一个弹窗实例, 你可以对这个弹窗在各个 生命周期 进行监听处理， 如下 我再弹窗做动画前， 修改了 props
+
+
+```jsx
+import React from 'react';
+import { ModalControlIns } from '@lightfish/waterui';                 
+
+ModalControlIns.addEventsListener('beforeShow', (e) => {
+  console.log('ModalControlIns', e)
+})
+
+export default () => {
+  const [modalIns, setModalIns] = React.useState(null)
+
+  function onInitModal() {
+    setModalIns(ModalControlIns.initModal((props) => {
+      return (
+        <div onClick={props.closeModal}>test {props.test}</div>
+      )
+    }, {
+      test: 'onInitModal'
+    }))
+  }
+
+  function onListenCircleState() {
+    if (!modalIns) {
+      alert('no modalIns')
+      return
+    }
+    modalIns.onceEventsListener('beforeShow', (e) => {
+      console.log(e)
+      e.target.setProps({
+        test: 'before test'
+      })
+    })
+    modalIns.forceShow()
+  }
+  return (
+    <div>
+      <button onClick={onInitModal}>初始化一个弹窗实例</button>
+      <button onClick={onListenCircleState}>监听弹窗实例, 并打开弹窗</button>
+    </div>
+  )
+}
+```
+
+### setUniqueModal
+> `setUniqueModal`设置 唯一弹窗，这里是避免在日常开始代码编写中 频繁引入 外部文件，导致页面相对冗杂，这边就 推荐使用`setUniqueModal`进行设置 字符串key 来对应具体的某一个弹窗，你可以统一在 新建一个文件 进行管理。
+
+```ts
+// 弹窗和生命周期
+enum ModalState {
+  BEFOREINIT = 'beforeInit', // 暂不使用
+  INITED = 'inited',
+  BEFORESHOW = 'beforeShow',
+  SHOWED = 'showed',
+  BEFORECLOSE = 'beforeClose',
+  CLOSED = 'closed',
+  BEFOREDESTROY = 'beforeDestroy', // 暂不使用
+  DESTROYED = 'destroyed' // 暂不使用
+}
 ```

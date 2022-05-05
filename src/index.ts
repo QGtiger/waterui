@@ -1,6 +1,10 @@
-import { UseAni, UseModal, WTIModal } from './WModal/src/modalClass';
-import { ModalCtrlIns } from './Modal';
-import { UseLfModal } from './Modal/src/modalClass';
 import { WtModal, ModalControlIns } from './WModal/index';
+import { UsePreload } from './UseDecorator/UsePreLoad';
+import { UseModal } from './UseDecorator/UseModal';
 
-export { WtModal, ModalControlIns };
+export { 
+  WtModal, 
+  ModalControlIns,
+  UsePreload,
+  UseModal,
+};

@@ -1,5 +1,5 @@
 import { setStyles } from '@lightfish/tools';
-import React, { forwardRef, useImperativeHandle, useReducer, useRef } from 'react';
+import React, { forwardRef, useCallback, useImperativeHandle, useReducer, useRef } from 'react';
 import { ReactComponent } from './types';
 
 // 加载过的资源
@@ -167,11 +167,11 @@ export function makeObserverComp(Comp: ReactComponent) {
 
 export function useForceUpdate(Comp: ReactComponent): [any, any] {
   const forceUpdateFunc = useRef<Function>();
-  const finalComp = (props: any) => {
+  const finalComp = useCallback((props: any) => {
     const [, fUpdate] = useReducer((s) => s + 1, 0);
     forceUpdateFunc.current = fUpdate;
     return <Comp {...props} />;
-  };
+  }, []);
   return [forceUpdateFunc, finalComp];
 }
 
@@ -240,10 +240,14 @@ export class Queue<T> {
     this.items = [];
   }
 
-  enqueue(item: T) {
-    if (!item) return;
-    // 入队
-    this.items.push(item);
+  enqueue(item: T): boolean {
+    if (!item) return false;
+    if (this.items.indexOf(item) === -1) {
+      // 入队
+      this.items.push(item);
+      return true
+    }
+    return false
   }
 
   /**
