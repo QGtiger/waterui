@@ -33,9 +33,14 @@ export function UseAni(common: UseAniType) {
         typeof this.props.getAniIns === 'function' && this.props.getAniIns(this.aniFactory);
 
         if (common.autoAni) {
-          setTimeout(() => {
-            this.aniFactory.showAni();
-          }, autoDelayAni)
+          if (autoDelayAni === 0) {
+            this.aniFactory.showAni()
+          } else {
+            setTimeout(() => {
+              this.aniFactory.showAni();
+            }, autoDelayAni)
+          }
+          
           
         }
       }
