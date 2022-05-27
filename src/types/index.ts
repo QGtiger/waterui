@@ -32,6 +32,7 @@ export type UseModalConfig = {
   isOpen: boolean, // 是否打开
 } & AniModalConfig;
 
+
 export enum ModalState {
   BEFOREINIT = 'beforeInit',
   INITED = 'inited',

@@ -48,7 +48,9 @@ nav:
 
 ```jsx
 import React from 'react';
-import { ModalControlIns } from '@lightfish/waterui';                 
+import { ModalControlIns } from '@lightfish/waterui';
+
+window.ModalControlIns = ModalControlIns
 
 export default () => {
   function showTestModal() {

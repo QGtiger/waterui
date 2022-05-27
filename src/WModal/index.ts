@@ -1,8 +1,8 @@
+import { EventDispatcher } from '../Module/EventsDispatcher';
+import { ModalState } from '../types';
 import { ShowModalConfig } from '../types/WModal';
-import { UseEvents } from './src/decorator';
 import { WTIModal } from './src/modalClass';
 import {
-  ModalState,
   ReactComponent,
   AnyModalProps,
   UniqueKeyModal,
@@ -29,8 +29,7 @@ const defaultModalControllerConfig: ShowModalConfig = {
   preloadResourceFunc: {}
 };
 
-@UseEvents()
-export class ModalControl {
+export class ModalControl extends EventDispatcher<ModalState> {
   private defaultShowModalConfig: ShowModalConfig = defaultModalControllerConfig;
 
   private activeModalList: Queue<WTIModal> = new Queue(); // 当前显示的 弹窗队列

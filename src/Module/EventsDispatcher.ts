@@ -23,10 +23,8 @@ export type EventsCallBackCenter = {
   [key: string]: Array<EventCallBack>
 }
 
-export class EventDispatcher<T = string> {
+export class EventDispatcher<EventsKeyName extends string> {
   _events: EventsCallBackCenter = Object.create(null)
-  constructor(...args: any[]) {
-  }
 
   /**
    * 添加事件
@@ -34,7 +32,7 @@ export class EventDispatcher<T = string> {
    * @param call 事件回调
    * @param context 事件回调的 this指向
    */
-  addEventsListener(type: string | string[], call: EventCallBackFunc, context?: any) {
+  addEventsListener(type: EventsKeyName | EventsKeyName[], call: EventCallBackFunc, context?: any) {
     if (Array.isArray(type)) {
       type.map(t => {
         this.addEventsListener(t, call, context)
@@ -54,7 +52,7 @@ export class EventDispatcher<T = string> {
    * @param context 
    * @returns 
    */
-  onceEventsListener(type: string | string[], call: EventCallBackFunc, context?: any) {
+  onceEventsListener(type: EventsKeyName | EventsKeyName[], call: EventCallBackFunc, context?: any) {
     const on = (...args: any[]) => {
       this.removeEventsListener(type, on)
       // @ts-ignore
@@ -70,7 +68,7 @@ export class EventDispatcher<T = string> {
    * @param call 
    * @returns 
    */
-  removeEventsListener(type?: string | string[], call?: EventCallBackFunc) {
+  removeEventsListener(type?: EventsKeyName | EventsKeyName[], call?: EventCallBackFunc) {
     if (!type) {
       // 这里 需要需要修改用 delete
       // this._events = Object.create(null)
@@ -112,10 +110,10 @@ export class EventDispatcher<T = string> {
    * @param event 
    * @returns 
    */
-  dispatchEvents(type: string | string[], data?: any)  {
+  dispatchEvents(type: EventsKeyName | EventsKeyName[], event?: any)  {
     if (Array.isArray(type)) {
       type.map(t => {
-        this.dispatchEvents(t, data)
+        this.dispatchEvents(t, event)
       })
       return this
     }
@@ -123,10 +121,8 @@ export class EventDispatcher<T = string> {
     if (cbs && cbs.length) {
       cbs.map((item: EventCallBack) => {
         const _this = item.context
-        
-        item.call.apply(_this, [{
-          type, data
-        }])
+        // @ts-ignore
+        item.call.apply(_this, [event || this.event])
       })
     }
   }

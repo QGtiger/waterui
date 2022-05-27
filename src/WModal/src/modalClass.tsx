@@ -1,5 +1,4 @@
 import { addClass } from '@lightfish/tools';
-import { UseEvents } from './decorator';
 import {
   AnyModalProps,
   Event,
@@ -17,9 +16,12 @@ import { UseModal } from '../../UseDecorator/UseModal';
 import { UsePreload } from '../../UseDecorator/UsePreLoad';
 import { modalInsType } from '../../types';
 import { ShowModalConfig } from '../../types/WModal';
+import { EventDispatcher } from '../../Module/EventsDispatcher';
 
-@UseEvents()
-export class WTIModal {
+// @UseEvents()
+
+
+export class WTIModal extends EventDispatcher<ModalState> {
   component: ReactComponent;
   props: AnyModalProps;
   modalCfg: ShowModalConfig;
@@ -51,6 +53,7 @@ export class WTIModal {
     modalCfg: ShowModalConfig,
     uniqueKey: UniqueKeyModal,
   ) {
+    super()
     this.component = comp;
     this.props = props;
     this.modalCfg = modalCfg;
