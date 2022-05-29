@@ -14,14 +14,14 @@ import {
 import './modalClass.css';
 import { UseModal } from '../../UseDecorator/UseModal';
 import { UsePreload } from '../../UseDecorator/UsePreLoad';
-import { modalInsType } from '../../types';
+import { modalInsType, ModalStateStr } from '../../types';
 import { ShowModalConfig } from '../../types/WModal';
 import { EventDispatcher } from '../../Module/EventsDispatcher';
 
 // @UseEvents()
 
 
-export class WTIModal extends EventDispatcher<ModalState> {
+export class WTIModal extends EventDispatcher<ModalStateStr> {
   component: ReactComponent;
   props: AnyModalProps;
   modalCfg: ShowModalConfig;

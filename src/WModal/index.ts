@@ -1,5 +1,5 @@
 import { EventDispatcher } from '../Module/EventsDispatcher';
-import { ModalState } from '../types';
+import { ModalState, ModalStateStr } from '../types';
 import { ShowModalConfig } from '../types/WModal';
 import { WTIModal } from './src/modalClass';
 import {
@@ -29,7 +29,7 @@ const defaultModalControllerConfig: ShowModalConfig = {
   preloadResourceFunc: {}
 };
 
-export class ModalControl extends EventDispatcher<ModalState> {
+export class ModalControl extends EventDispatcher<ModalStateStr> {
   private defaultShowModalConfig: ShowModalConfig = defaultModalControllerConfig;
 
   private activeModalList: Queue<WTIModal> = new Queue(); // 当前显示的 弹窗队列

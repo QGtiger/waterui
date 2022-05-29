@@ -32,7 +32,6 @@ export type UseModalConfig = {
   isOpen: boolean, // 是否打开
 } & AniModalConfig;
 
-
 export enum ModalState {
   BEFOREINIT = 'beforeInit',
   INITED = 'inited',
@@ -43,6 +42,10 @@ export enum ModalState {
   BEFOREDESTROY = 'beforeDestroy',
   DESTROYED = 'destroyed'
 }
+
+export type ModalStateStr = {
+  [k in keyof typeof ModalState]: typeof ModalState[k] extends `${infer P}` ? P :never
+}[keyof typeof ModalState]
 
 export type modalInsType = {
   modalShow: () => Promise<any>;
