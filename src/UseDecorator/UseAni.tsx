@@ -1,4 +1,4 @@
-import { AniFactory } from "@lightfish/tools";
+import { AniFactory, setStyles } from "@lightfish/tools";
 import React, { createRef } from "react";
 import { AniModalConfig, ReactComponent } from "../types";
 
@@ -23,7 +23,7 @@ export function UseAni(common: UseAniType) {
 
       componentDidMount() {
 
-        const { aniConfig, showAniConfig, closeAniConfig, autoDelayAni = 0 } = common;
+        const { aniConfig, showAniConfig, closeAniConfig, autoDelayAni = 0, autoAni = true } = common;
         this.aniFactory = new AniFactory(
           this.aniCont.current,
           showAniConfig || aniConfig,
@@ -32,7 +32,7 @@ export function UseAni(common: UseAniType) {
 
         typeof this.props.getAniIns === 'function' && this.props.getAniIns(this.aniFactory);
 
-        if (common.autoAni) {
+        if (autoAni) {
           if (autoDelayAni === 0) {
             this.aniFactory.showAni()
           } else {
@@ -40,8 +40,10 @@ export function UseAni(common: UseAniType) {
               this.aniFactory.showAni();
             }, autoDelayAni)
           }
-          
-          
+        } else {
+          setStyles(this.aniCont.current, {
+            display: 'none'
+          })
         }
       }
 
