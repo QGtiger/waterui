@@ -40,10 +40,6 @@ export function UseAni(common: UseAniType) {
               this.aniFactory.showAni();
             }, autoDelayAni)
           }
-        } else {
-          setStyles(this.aniCont.current, {
-            display: 'none'
-          })
         }
       }
 
