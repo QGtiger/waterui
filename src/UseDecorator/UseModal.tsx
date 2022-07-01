@@ -11,6 +11,7 @@ const defaultUseModalConfig: UseModalConfig = {
   isOpen: false,
   center: true,
   coc: false,
+  cc: false,
   containerStyle: {},
   fixedBody: true,
   aniConfig: {
@@ -43,10 +44,12 @@ const onGenerateBodyProps = (pop: any) => {
  * 初始化 ModalMask 的事件 Props
  * @returns
  */
-const onGenerateMaskProps = (pop: any, maskClickCb: Function) => {
+const onGenerateMaskProps = (pop: any, maskClickCb: Function, maskClickCaptureCb: Function=() => {}) => {
   const preventWhenItsAni = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if ([ModalState.BEFORECLOSE, ModalState.BEFORESHOW].includes(pop.circleState)) {
       e.stopPropagation();
+    } else {
+      maskClickCaptureCb(e)
     }
   };
   return {
@@ -163,6 +166,10 @@ export function UseModal(useModalCfg: Partial<UseModalConfig>) {
             ref={this.maskCont}
             {...onGenerateMaskProps(this, () => {
               if (finalCfg.coc) {
+                this.modalHide()
+              }
+            }, (e: React.MouseEvent) => {
+              if (finalCfg.cc) {
                 this.modalHide()
               }
             })}

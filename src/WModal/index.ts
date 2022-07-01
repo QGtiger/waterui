@@ -16,6 +16,7 @@ const defaultModalControllerConfig: ShowModalConfig = {
   queue: false,
   forceShow: false,
 
+  cc: false,
   coc: false,
   fixedBody: true,
   center: true,
@@ -223,6 +224,17 @@ export class ModalControl extends EventDispatcher<ModalStateStr> {
           return modalIns;
         }
       }
+    }
+  }
+
+  async closeModal(
+    ukm: UniqueKeyModal
+  ) {
+    const currModal = this.modalMap.get(ukm)
+    if (currModal) {
+      await currModal.forceClose()
+    } else {
+      console.warn(`并没有找到弹窗组件，请检查弹窗名称是否正确，或者弹窗是否已经被销毁。`);
     }
   }
 }

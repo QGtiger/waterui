@@ -26,6 +26,7 @@ export type PreLoadType = {
 
 export type UseModalConfig = {
   coc: boolean, // click outside close
+  cc: boolean, // click close
   fixedBody: boolean, // 是否 固定背景
   center: boolean, // 居中
   containerStyle: CSSProperties, // 外部容器 style 样式

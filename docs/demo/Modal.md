@@ -57,10 +57,13 @@ export default () => {
     // 默认方法组件会给 props 上挂载一个 closeModal 进行内部调用关闭
     ModalControlIns.showModal((props) => {
       return (
-        <div onClick={props.closeModal}>test {props.test}</div>
+        <div>test {props.test}</div>
       )
     }, {
       test: 'showTestModal'
+    }, {
+      coc: true,
+      cc: true
     })
   }
 
