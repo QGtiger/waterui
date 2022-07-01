@@ -52,24 +52,36 @@ import { ModalControlIns } from '@lightfish/waterui';
 
 window.ModalControlIns = ModalControlIns
 
-export default () => {
-  function showTestModal() {
-    // 默认方法组件会给 props 上挂载一个 closeModal 进行内部调用关闭
-    ModalControlIns.showModal((props) => {
+const TT = (props) => {
       return (
         <div>test {props.test}</div>
       )
-    }, {
+    }
+
+export default () => {
+  function showTestModal() {
+    // 默认方法组件会给 props 上挂载一个 closeModal 进行内部调用关闭
+    ModalControlIns.showModal(TT, {
       test: 'showTestModal'
     }, {
       coc: true,
-      cc: true
+      cc: true,
+      destroyed: false,
+      aniConfig: {
+        aniName: 'demo-fade-in',
+        aniType: 'animation'
+      }
     })
   }
 
   function showClassCompModal() {
     // 默认 class 组件 会直接在原型上 挂一个 closeModal 方法
     ModalControlIns.showModal(class extends React.Component{
+
+      componentDidAniEnd() {
+        console.log(123123123)
+      }
+
       render() {
         return (
           <div onClick={this.closeModal}>test {this.props.test}</div>
@@ -78,7 +90,8 @@ export default () => {
     }, {
       test: 'showClassCompModal'
     }, {
-      coc: true
+      coc: true,
+      destroyed: false,
     })
   }
   return (

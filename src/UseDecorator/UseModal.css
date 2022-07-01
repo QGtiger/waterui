@@ -17,8 +17,12 @@
   margin: auto;
 }
 
-.demo-fade-in {
-  animation: fadeIn .6s linear forwards;
+.demo-fade-in-enter {
+  animation: fadeIn .8s linear forwards;
+}
+
+.demo-fade-in-leave {
+  animation: fadeOut .3s linear forwards;
 }
 
 @keyframes fadeIn {
