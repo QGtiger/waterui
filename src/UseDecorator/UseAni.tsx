@@ -8,12 +8,6 @@ type UseAniType = AniModalConfig & {
   autoDelayAni?: number
 };
 
-function useAniDidEnd(effect: Function, diff){
-  if (diff.onAniDidEnd) {
-    diff.onAniDidEnd(effect)
-  }
-}
-
 /**
  * 动画装饰器
  */
